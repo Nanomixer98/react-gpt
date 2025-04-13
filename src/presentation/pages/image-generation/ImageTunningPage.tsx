@@ -29,8 +29,7 @@ export const ImageTunningPage = () => {
       text: 'Imagen base',
       info: {
         altText: 'Imagen base',
-        imageUrl:
-          'http://localhost:3000/gpt/image-generation/1742827467115.png',
+        imageUrl: 'http://localhost:3000/gpt/image-generation/keyboard.png',
       },
     },
   ]);
