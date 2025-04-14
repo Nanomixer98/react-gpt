@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { imageGenerationUseCase } from '../../../core/use-cases';
 import {
   GptMessage,
   GptMessageImage,
@@ -6,7 +7,6 @@ import {
   TextMessageBox,
   TypingLoader,
 } from '../../components';
-import { imageGenerationUseCase } from '../../../core/use-cases';
 
 interface Message {
   text: string;
@@ -18,6 +18,7 @@ interface Message {
 }
 
 export const ImageGenerationPage = () => {
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [messages, setMessage] = useState<Message[]>([]);
 
@@ -48,9 +49,16 @@ export const ImageGenerationPage = () => {
     ]);
   };
 
+  useEffect(() => {
+    chatContainerRef.current?.scrollTo({
+      top: chatContainerRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [messages]);
+
   return (
     <div className="chat-container">
-      <div className="chat-messages">
+      <div ref={chatContainerRef} className="chat-messages">
         <div className="grid grid-cols-12 gap-y-2">
           {/* Wellcome */}
           <GptMessage text="¿Qué imagen deseas generar?" />

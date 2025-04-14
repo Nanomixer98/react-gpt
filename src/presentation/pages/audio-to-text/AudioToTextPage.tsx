@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { audioToTextUseCase } from '../../../core/use-cases';
 import {
   GptMessage,
   MyMessage,
   TextMessageBoxFile,
   TypingLoader,
 } from '../../components';
-import { audioToTextUseCase } from '../../../core/use-cases';
 
 interface Message {
   text: string;
@@ -13,6 +13,7 @@ interface Message {
 }
 
 export const AudioToTextPage = () => {
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [messages, setMessage] = useState<Message[]>([]);
 
@@ -44,9 +45,16 @@ __De ${Math.round(segment.start)}s a - ${Math.round(segment.end)}s:__
     }
   };
 
+  useEffect(() => {
+    chatContainerRef.current?.scrollTo({
+      top: chatContainerRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [messages]);
+
   return (
     <div className="chat-container">
-      <div className="chat-messages">
+      <div ref={chatContainerRef} className="chat-messages">
         <div className="grid grid-cols-12 gap-y-2">
           {/* Wellcome */}
           <GptMessage text="Hola, que texto a partir de un audio quieres generar hoy?" />

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { orthographyUseCase } from '../../../core/use-cases';
 import {
   GptMessage,
@@ -19,6 +19,7 @@ interface Message {
 }
 
 export const OrthographyPage = () => {
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [messages, setMessage] = useState<Message[]>([]);
 
@@ -44,9 +45,16 @@ export const OrthographyPage = () => {
     setIsLoading(false);
   };
 
+  useEffect(() => {
+    chatContainerRef.current?.scrollTo({
+      top: chatContainerRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [messages]);
+
   return (
     <div className="chat-container">
-      <div className="chat-messages">
+      <div ref={chatContainerRef} className="chat-messages">
         <div className="grid grid-cols-12 gap-y-2">
           {/* Wellcome */}
           <GptMessage text="Hola, ¿cómo estás?" />

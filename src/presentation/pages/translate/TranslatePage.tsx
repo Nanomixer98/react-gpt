@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { translateStreamUseCase } from '../../../core/use-cases';
 import {
   GptMessage,
@@ -26,6 +26,7 @@ const languages = [
 ];
 
 export const TranslatePage = () => {
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const abortController = useRef(new AbortController());
   const isRunning = useRef(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -60,9 +61,16 @@ export const TranslatePage = () => {
     isRunning.current = false;
   };
 
+  useEffect(() => {
+    chatContainerRef.current?.scrollTo({
+      top: chatContainerRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [messages]);
+
   return (
     <div className="chat-container">
-      <div className="chat-messages">
+      <div ref={chatContainerRef} className="chat-messages">
         <div className="grid grid-cols-12 gap-y-2">
           {/* Wellcome */}
           <GptMessage text="¿Con que traducción te puedo ayudar?" />

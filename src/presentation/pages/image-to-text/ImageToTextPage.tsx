@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { imageExplanationUseCase } from '../../../core/use-cases/text/imageExplanation.use-case';
 import {
   GptMessage,
@@ -13,6 +13,7 @@ interface Message {
 }
 
 export const ImageToTextPage = () => {
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [messages, setMessage] = useState<Message[]>([]);
 
@@ -28,9 +29,16 @@ export const ImageToTextPage = () => {
     setMessage((prev) => [...prev, { isGpt: true, text: resp.data!.msg }]);
   };
 
+  useEffect(() => {
+    chatContainerRef.current?.scrollTo({
+      top: chatContainerRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [messages]);
+
   return (
     <div className="chat-container">
-      <div className="chat-messages">
+      <div ref={chatContainerRef} className="chat-messages">
         <div className="grid grid-cols-12 gap-y-2">
           {/* Wellcome */}
           <GptMessage text="Hola! Sube una imagen y te explicaré que es, o si tienes dudas sobre tu imagen, te responderé con una explicación" />

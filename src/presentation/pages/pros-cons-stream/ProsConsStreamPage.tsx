@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { prosConsStreamGeneratorUseCase } from '../../../core/use-cases';
 import {
   GptMessage,
@@ -13,6 +13,7 @@ interface Message {
 }
 
 export const ProsConsStreamPage = () => {
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const abortController = useRef(new AbortController());
   const isRunning = useRef(false);
 
@@ -67,9 +68,16 @@ export const ProsConsStreamPage = () => {
     // }
   };
 
+  useEffect(() => {
+    chatContainerRef.current?.scrollTo({
+      top: chatContainerRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [messages]);
+
   return (
     <div className="chat-container">
-      <div className="chat-messages">
+      <div ref={chatContainerRef} className="chat-messages">
         <div className="grid grid-cols-12 gap-y-2">
           {/* Wellcome */}
           <GptMessage text="Hola, ¿Qué deseas comparar?" />

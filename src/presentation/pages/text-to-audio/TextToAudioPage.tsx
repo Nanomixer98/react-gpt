@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { textToAudiUseCase } from '../../../core/use-cases';
 import {
   GptMessage,
@@ -24,6 +24,7 @@ interface AudioMessage {
 type Message = TextMessage | AudioMessage;
 
 export const TextToAudioPage = () => {
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [messages, setMessage] = useState<Message[]>([]);
   const disclaimer = `## ¿Qué audio quieres generar hoy?
@@ -64,9 +65,16 @@ export const TextToAudioPage = () => {
     setIsLoading(false);
   };
 
+  useEffect(() => {
+    chatContainerRef.current?.scrollTo({
+      top: chatContainerRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [messages]);
+
   return (
     <div className="chat-container">
-      <div className="chat-messages">
+      <div ref={chatContainerRef} className="chat-messages">
         <div className="grid grid-cols-12 gap-y-2">
           {/* Wellcome */}
           <GptMessage text={disclaimer} />

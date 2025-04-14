@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   imageGenerationUseCase,
   imageVariation,
@@ -22,6 +22,7 @@ interface Message {
 }
 
 export const ImageTunningPage = () => {
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [messages, setMessage] = useState<Message[]>([
     {
@@ -88,6 +89,13 @@ export const ImageTunningPage = () => {
     ]);
   };
 
+  useEffect(() => {
+    chatContainerRef.current?.scrollTo({
+      top: chatContainerRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [messages]);
+
   return (
     <>
       {originalImageAndMask.original && (
@@ -108,7 +116,7 @@ export const ImageTunningPage = () => {
       )}
 
       <div className="chat-container">
-        <div className="chat-messages">
+        <div ref={chatContainerRef} className="chat-messages">
           <div className="grid grid-cols-12 gap-y-2">
             {/* Wellcome */}
             <GptMessage text="¿Qué imagen deseas generar?" />
