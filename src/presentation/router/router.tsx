@@ -4,6 +4,7 @@ import {
   AssistantPage,
   AudioToTextPage,
   ImageGenerationPage,
+  ImageToTextPage,
   ImageTunningPage,
   OrthographyPage,
   ProsConsPage,
@@ -54,6 +55,13 @@ export const menuRoutes = [
     title: 'Audio a texto',
     description: 'Convertir audio a texto',
     component: <AudioToTextPage />,
+  },
+  {
+    to: '/image-to-text',
+    icon: 'fa-solid fa-x-ray',
+    title: 'Imágen a texto',
+    description: 'Explicar una imagen en texto',
+    component: <ImageToTextPage />,
   },
   {
     to: '/image-generation',
